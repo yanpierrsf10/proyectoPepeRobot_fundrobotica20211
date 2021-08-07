@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <param name="robot_description" textfile="$(find proyecto)/urdf/robot.urdf" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+  <remap from="joint_state_publisher" to="joint_states" /></node>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <param name="use_gui" value="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find proyecto)/config/robot-config.rviz" required="true" />
+</launch>

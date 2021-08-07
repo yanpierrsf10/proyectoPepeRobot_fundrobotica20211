@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+
+<robot name="robot">
+
+  <!-- Color of materials -->
+  <material name="yellow">
+    <color rgba="1 0.839 0 1"/>
+  </material>
+  <material name="gray">
+    <color rgba="0.267 0.267 0.267 1"/>
+  </material>
+  <material name="steel">
+    <color rgba="0.7 0.7 0.7 1"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material> 
+
+  <link name="Base">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Base.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0.3" xyz="0 0 0"/>
+      <material name="yellow" />
+    </visual>
+    <inertial>
+      <mass value="100"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.145" ixy="0.0" ixz="0.0" iyy="14.5" iyz="0.0" izz="20.708"/>
+    </inertial>
+  </link>
+  <gazebo reference="Base">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q1" type="revolute">
+    <parent link="Base"/>
+    <child link="Eslabon1"/>
+    <origin xyz="0 0 0.3"/>
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon1">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon1.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0.3" xyz="0 0 0"/>
+      <material name="gray" />
+    </visual>
+    <inertial>
+      <mass value="10"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="12.429" ixy="0.0" ixz="0.0" iyy="12.429" iyz="0.0" izz="4.797"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon1">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="q2" type="prismatic">
+    <parent link="Eslabon1"/>
+    <child link="Eslabon2"/>
+    <origin xyz="0 0 0.2"/>
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="0.1" lower="0" upper="0.5"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon2">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon2.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0.5" xyz="0 0 0"/>
+      <material name="steel" />
+    </visual>
+    <inertial>
+      <mass value="0.40"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="19.032" ixy="0.0" ixz="0.0" iyy="19.032" iyz="0.0" izz="0.578"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon2">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q3" type="revolute">
+    <parent link="Eslabon2"/>
+    <child link="Eslabon3"/>
+    <origin xyz="0 -0.21 1.2"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon3">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon3.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="yellow" />
+    </visual>
+    <inertial>
+      <mass value="0.40"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="6.719" ixy="-0.001" ixz="-0.593" iyy="8.49" iyz="0.011" izz="2.757"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon3">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q4" type="revolute">
+    <parent link="Eslabon3"/>
+    <child link="Eslabon4"/>
+    <origin xyz="0.254 0 0.385371"/>
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon4">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon4.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="yellow" />
+    </visual>
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.287" ixy="0.0" ixz="0.0" iyy="8.504" iyz="0.0" izz="8.499"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon4">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q5" type="revolute">
+    <parent link="Eslabon4"/>
+    <child link="Eslabon5"/>
+    <origin xyz="0.95 0 0"/>
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon5">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon5.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="gray" />
+    </visual>
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.648" ixy="0.0" ixz="0.0" iyy="0.629" iyz="0.0" izz="0.068"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon5">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q6" type="revolute">
+    <parent link="Eslabon5"/>
+    <child link="Eslabon6"/>
+    <origin xyz="0 0 -0.4225"/>
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Eslabon6">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Eslabon6.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="yellow" />
+    </visual>
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.007" ixy="0.0" ixz="0.0" iyy="0.011" iyz="0.0" izz="0.011"/>
+    </inertial>
+  </link>
+  <gazebo reference="Eslabon6">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="q7" type="revolute">
+    <parent link="Eslabon6"/>
+    <child link="Efector"/>
+    <origin xyz="0.3145 0 0" rpy="0 1.57079 0"/>
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="0.1" lower="-3.1" upper="3.1"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="Efector">
+    <visual>
+      <geometry>
+        <mesh filename="package://proyecto/meshes/Efector_Final.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white" />
+    </visual>
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.02" ixy="0.0" ixz="0.0" iyy="0.017" iyz="0.0" izz="0.004"/>
+    </inertial>
+  </link>
+  <gazebo reference="Efector">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <!-- Transmissions -->
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q6">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="q7">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor7">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+   <!-- Plugin: ros_control -->
+   <gazebo>
+     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+       <robotNamespace>/robot</robotNamespace>
+       <legacyModeNS>true</legacyModeNS>
+     </plugin>
+   </gazebo>
+
+</robot>

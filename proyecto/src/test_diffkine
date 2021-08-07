@@ -1,0 +1,155 @@
+#!/usr/bin/env python
+#
+from __future__ import print_function
+import rospy
+from sensor_msgs.msg import JointState
+from numpy.linalg import matrix_rank
+
+from markers import *
+from functions import *
+
+# Initialize the node
+rospy.init_node("testKineControlPosition")
+print('starting motion ... ')
+# Publisher: publish to the joint_states topic
+pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+# Files for the logs
+fxcurrent = open("/tmp/xcurrent.txt", "w")                
+fxdesired = open("/tmp/xdesired.txt", "w")
+fq = open("/tmp/q.txt", "w")
+
+# Bucle de ejecucion continua
+t = 0.0
+
+# Markers for the current and desired positions
+bmarker_current  = BallMarker(color['RED'])
+bmarker_desired = BallMarker(color['GREEN'])
+
+# Joint names
+jnames = ['q1', 'q2', 'q3','q4', 'q5', 'q6','q7']
+
+# Desired position
+xd = np.array([-0.25, -1.5, 2.5])
+delta=0.0001
+# Initial configuration
+q0 = np.array([0.0, 0.05, 0, 0, -1, 1, 0.0])
+J0=np.round(jacobian(q0,delta),4)
+rango=matrix_rank(J0)
+
+print("Jacobiano Inicial:")
+print(J0)
+print("Rango Inicial:")
+print(rango)
+
+# Resulting initial position (end effector with respect to the base link)
+T = fkine(q0)
+x0 = T[0:3,3]
+
+# Red marker shows the achieved position
+bmarker_current.xyz(x0)
+# Green marker shows the desired position
+bmarker_desired.xyz(xd)
+
+# Instance of the JointState message
+jstate = JointState()
+# Values of the message
+jstate.header.stamp = rospy.Time.now()
+jstate.name = jnames
+# Add the head joint value (with value 0) to the joints
+jstate.position = q0
+
+# Frequency (in Hz) and control period 
+freq = 200
+dt = 1.0/freq
+rate = rospy.Rate(freq)
+
+# Initial joint configuration
+q = copy(q0)
+# Initial values
+k=5
+
+x=x0
+emin=np.array([0.001])
+# Main loop
+while not rospy.is_shutdown():
+    # Current time (needed for ROS)
+    jstate.header.stamp = rospy.Time.now()
+    # Restricciones articulares
+    if (q[0] >= 3.1):
+        q[0] = 3.1
+        print("q1 maximo alcanzado")
+    if (q[0] <= -3.1):
+        q[0] = -3.1
+        print("q1 minimo alcanzado")
+    if (q[1] >= 0.5):
+        q[1] = 0.5
+        print("q2 maximo alcanzado")
+    if (q[1] <= 0):
+        q[1] = 0
+        print("q2 minimo alcanzado")
+    if (q[2] >= 3.1):
+        q[2] = 3.1
+        print("q3 maximo alcanzado")
+    if (q[2] <= -1.35):
+        q[2] = -1.35
+        print("q3 minimo alcanzado")
+    if (q[3] >= 3.1):
+        q[3] = 3.1
+        print("q4 maximo alcanzado")
+    if (q[3] <= -3.1):
+        q[3] = -3.1
+        print("q4 minimo alcanzado")
+    if (q[4] >= 0):
+        q[4] = 0
+        print("q5 maximo alcanzado")
+    if (q[4] <= -3.1):
+        q[4] = -3.1
+        print("q5 minimo alcanzado")
+    if (q[5] >= 3.1):
+        q[5] = 3.1
+        print("q6 maximo alcanzado")
+    if (q[5] <= 0):
+        q[5] = 0
+        print("q6 minimo alcanzado")
+    if (q[6] >= 3.1):
+        q[6] = 3.1
+        print("q7 maximo alcanzado")
+    if (q[6] <= -3.1):
+        q[6] = -3.1
+        print("q7 minimo alcanzado")
+    # Kinematic control law for position (complete here)
+    # -----------------------------
+    e=x-xd #Referencia
+    # Norma del error
+    enorm = np.linalg.norm(e)
+    if(enorm<=emin):
+        print('Configuracion articular alcanzada')
+        break
+    e_dot=-k*e #Ley de Control
+    J=jacobian(q,delta) #Jacobiano analitico obtenida numericamente
+    q_dot=np.linalg.pinv(J).dot(e_dot) #Inversa de Penrose
+    q=q+dt*q_dot #Actualizacion de la configuracion articular
+    # -----------------------------
+    T=fkine(q)
+    x=T[0:3,3] # Posicion actualizada
+    print("Posicion")
+    print(x)
+
+    # Log values                                                      
+    fxcurrent.write(str(t)+' '+str(x[0])+' '+str(x[1]) +' '+str(x[2])+'\n')
+    fxdesired.write(str(t)+' '+str(xd[0])+' '+str(xd[1])+' '+str(xd[2])+'\n')
+    fq.write(str(t)+' '+str(q[0])+" "+str(q[1])+" "+str(q[2])+" "+str(q[3])+" "+
+             str(q[4])+" "+str(q[5])+" "+str(q[6])+"\n")
+    
+    # Publish the message
+    jstate.position = q
+    pub.publish(jstate)
+    bmarker_desired.xyz(xd)
+    bmarker_current.xyz(x)
+    t=t+dt
+    # Wait for the next iteration
+    rate.sleep()
+print('ending motion ...')
+fxcurrent.close()
+fxdesired.close()
+fq.close()
